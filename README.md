@@ -1,291 +1,139 @@
-# Butility Style Utils
+# Butility Scroll Library
 
-@butility/style provides utilities to manage web fonts, CSS styles, and color manipulations for web development. It includes tools for managing themes, applying dynamic styles, and handling color operations.
+## Overview
 
-## Table of Contents
+The `@butility/scroll` library provides a set of utilities for handling various scrolling and animation effects in the browser, including scrolling to elements, smooth scrolling, visibility checks, and animations like fading and sliding. It simplifies interactions with the DOM by offering easy-to-use functions for common scroll-based behaviors.
 
-1. [Installation](#installation)
-2. [Usage](#usage)
-    - [Theme Management](#theme-management)
-    - [Font Management](#font-management)
-    - [CSS Style Management](#css-style-management)
-    - [Color Utilities](#color-utilities)
-3. [API Reference](#api-reference)
-    - [ThemeManager](#thememanager)
-    - [Font Utilities](#font-utilities)
-    - [CSS Utilities](#css-utilities)
-    - [Color Utilities](#color-utilities)
+## Features
+
+- Smooth scrolling to specific elements or positions.
+- Animations for fading in/out, sliding up/down elements.
+- Utility functions for checking element visibility and scroll positions.
+- Scroll disabling and enabling for controlled user experience.
+- Customizable easing function for smooth animations.
 
 ## Installation
 
 To install the package, you can use npm or CDN:
 
 ```sh
-npm install @butility/style
+npm install @butility/scroll
 ```
 
 ```html
 <!-- To use all the functions and methods -->
-<script src="https://unpkg.com/@butility/style@latest/style.js" type="module"></script>
-<script src="https://cdn.jsdelivr.net/npm/@butility/style@latest/style.js"></script>
-<!-- To use Color utils -->
-<script src="https://unpkg.com/@butility/style@latest/color.js" type="module"></script>
-<script src="https://cdn.jsdelivr.net/npm/@butility/style@latest/color.js"></script>
-<!-- To use CSS utils -->
-<script src="https://unpkg.com/@butility/style@latest/css.js" type="module"></script>
-<script src="https://cdn.jsdelivr.net/npm/@butility/style@latest/css.js"></script>
-<!-- To use Font Utils -->
-<script src="https://unpkg.com/@butility/style@latest/font.js" type="module"></script>
-<script src="https://cdn.jsdelivr.net/npm/@butility/style@latest/font.js"></script>
-<!-- To use state utils -->
-<script src="https://unpkg.com/@butility/style@latest/state.js" type="module"></script>
-<script src="https://cdn.jsdelivr.net/npm/@butility/style@latest/state.js"></script>
-<!-- To use theme utils -->
-<script src="https://unpkg.com/@butility/style@latest/theme.js" type="module"></script>
-<script src="https://cdn.jsdelivr.net/npm/@butility/style@latest/theme.js"></script>
+<script src="https://unpkg.com/@butility/scroll@latest/scroll.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/@butility/scroll@latest/scroll.js" type="module"></script>
 ```
 
-## Usage
+## Usage Example
 
-### Theme Management
+```javascript
+import { smoothScrollToElement, fadeIn, disableScroll } from '@butility/scroll';
 
-You can manage multiple themes for your web app using the `ThemeManager` class.
+// Smooth scroll to an element with a duration of 500ms
+smoothScrollToElement(document.querySelector('#target-element'), 500);
 
-```js
-import { ThemeManager } from '@butility/style';
-import { button, body } from '@butility/dom/html'; // Used for example only; you can install it.
-
-// Define your themes
-const themes = {
-    light: {
-        background: '#ffffff',
-        color: '#000000',
-        // Add more properties as needed
-    },
-    dark: {
-        background: '#000000',
-        color: '#ffffff',
-        // Add more properties as needed
-    },
-};
-
-// Instantiate ThemeManager with the defined themes
-const themeManager = new ThemeManager(themes);
-
-// Function to toggle between light and dark themes
-function toggleTheme() {
-    const currentTheme = themeManager.getCurrentTheme();
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    themeManager.setTheme(newTheme);
-}
-
-// Initial setup to apply the current theme
-document.addEventListener('DOMContentLoaded', () => {
-    const currentTheme = themeManager.getCurrentTheme();
-    if (currentTheme) {
-        themeManager.setTheme(currentTheme);
-    } else {
-        themeManager.setTheme('light');
-    }
+// Fade in an element over 1 second
+fadeIn(document.querySelector('.fade-in-element'), 1000, () => {
+    console.log('Element is now visible');
 });
 
-// Example of a button to toggle themes
-const toggleButton = button('Toggle Theme');
-toggleButton.onclick = toggleTheme;
-body(toggleButton);
+// Disable scrolling
+disableScroll();
 ```
 
+## Functions
 
-### Font Management
-
-Use the `Font` module to load web fonts dynamically, either synchronously or asynchronously.
+### Animations
 
-#### Load Web Font
+- **`animateHeight(element, startHeight, endHeight, duration, callback)`**
+  Animates the height of an element from `startHeight` to `endHeight` over a specified `duration`.
 
-```js
-import { loadWebFont, loadWebFontAsync } from '@butility/style/font';
+- **`animateOpacity(element, startOpacity, endOpacity, duration, callback)`**
+  Animates the opacity of an element between specified values.
 
-// Loading a Google Font using loadWebFont 
-loadWebFont({
-    family: 'Roboto',
-    weight: '400',
-    style: 'normal',
-    subsets: ['latin'],
-    elements: ['body', 'h1', 'p'], // Apply to body, h1, and p tags
-    fallbackFonts: ['Arial', 'sans-serif'],
-    display: 'swap',
-    lazyLoad: false,  // Load immediately, if true, then unless the specified elementis in view the font won't load
-    preload: true,    // Preload for better performance
-});
+- **`fadeIn(element, duration, callback)`**
+  Gradually fades in an element over the specified duration.
 
-// Asynchronously loading a Google Font
-loadWebFontAsync({
-    family: 'Open Sans',
-    weight: '600',
-    style: 'normal',
-    subsets: ['latin'],
-    elements: ['body', 'h1'],
-    fallbackFonts: ['Verdana', 'sans-serif'],
-    display: 'swap',
-    lazyLoad: true,   // Load font lazily when elements are visible
-    preload: true,    // Preload the font for better performance
-    timeout: 3000,    // Set a 3-second timeout
-    onLoadSuccess: () => {
-        console.log('Font successfully loaded!');
-    },
-    onLoadError: (error) => {
-        console.error('Error loading font:', error);
-    },
-    observerOptions: { threshold: 0.5 }, // Load font when 50% of the element is visible
-})
-    .then(() => {
-        console.log('Font is applied to the elements.');
-    })
-    .catch((error) => {
-        console.error('Font loading failed:', error);
-    });
-```
+- **`fadeOut(element, duration, callback)`**
+  Gradually fades out an element over the specified duration.
 
-### CSS Style Management
+- **`slideDown(element, duration, callback)`**
+  Slides down an element, revealing its content.
 
-Manipulate styles dynamically in your web application.
+- **`slideUp(element, duration, callback)`**
+  Slides up an element, hiding its content.
 
-```js
-import { addStyles, getAllStyles, removeStylesByProps } from '@butility/style';
+- **`slideToggle(element, duration, callback)`**
+  Toggles the visibility of an element by sliding it up or down.
 
-// Add styles to elements
-addStyles(document.body, { backgroundColor: '#f0f0f0', color: '#333' });
+### Scroll Utilities
 
-// Get all styles of an element
-const styles = getAllStyles(document.body);
+- **`disableScroll()`**
+  Disables scrolling on the page.
 
-// Remove specific styles from an element
-removeStylesByProps(document.body, 'backgroundColor', 'color');
-```
+- **`enableScroll()`**
+  Re-enables scrolling on the page if previously disabled.
 
-### Color Utilities
+- **`getDocumentScrollLeft()`**
+  Returns the number of pixels the document is scrolled horizontally.
 
-Perform various color manipulations such as generating gradients or converting between color formats.
+- **`getDocumentScrollTop()`**
+  Returns the number of pixels the document is scrolled vertically.
 
-```js
-import { lightenColor, hexToRgb, generateColorGradient } from '@butility/style';
+- **`getViewportScrollLeft()`**
+  Returns the number of pixels the viewport is scrolled horizontally.
 
-// Lighten a color
-const lighterColor = lightenColor('#ff0000', 10);
+- **`getViewportScrollTop()`**
+  Returns the number of pixels the viewport is scrolled vertically.
 
-// Convert HEX to RGB
-const rgbColor = hexToRgb('#ff0000');
+- **`getFullHeight(element)`**
+  Returns the full height of the element including any hidden or overflow content.
 
-// Generate a color gradient
-const gradient = generateColorGradient('#ff0000', '#00ff00', 5);
-```
+- **`getScrollPosition(element)`**
+  Returns the current scroll position of the given element.
 
-## API Reference
+- **`isElementVisible(element)`**
+  Checks if the element is visible within the current viewport.
 
-### ThemeManager
+### Scrolling
 
-A utility for managing themes in a web application.
+- **`scrollToBottom(duration)`**
+  Smoothly scrolls to the bottom of the page.
 
-#### Methods:
+- **`scrollToElement(element)`**
+  Scrolls the page to the specified element.
 
-- **createTheme(name: string, theme: object):** Creates a new theme.
-- **setTheme(name: string):** Sets the current theme by name.
-- **getCurrentTheme(): string | null:** Returns the current theme.
-- **loadThemeFromStorage(): void (private)**: Loads the theme from local storage.
-- **detectSystemTheme(): void (private)**: Detects the system theme (light/dark) and applies it.
-- **watchSystemTheme(): void (private)**: Watches for system theme changes and updates the theme accordingly.
+- **`scrollToPosition(element, position)`**
+  Scrolls the specified element to a specific position.
 
-### Font Utilities
+- **`scrollToTop(duration)`**
+  Smoothly scrolls to the top of the page.
 
-#### `loadWebFont(options: FontOptions): void`
+- **`smoothScrollToElement(element, duration)`**
+  Smoothly scrolls to the specified element within a given duration.
 
-Synchronously loads a web font.
+- **`smoothScrollToPosition(targetPosition, duration)`**
+  Smoothly scrolls the page to a specific vertical position.
 
-##### Options:
+- **`smoothScrollToTop(duration)`**
+  Smoothly scrolls the page to the top within a given duration.
 
-- `family`: The font family to load (e.g., `'Roboto'`).
-- `weight`: (Optional) Font weight, defaults to `'400'`.
-- `style`: (Optional) Font style, defaults to `'normal'`.
-- `elements`: (Optional) Elements to apply the font to (default: `['body']`).
-- `fallbackFonts`: (Optional) Array of fallback fonts.
-- `preload`: (Optional) Whether to preload the font.
-- `lazyLoad`: (Optional) Lazy load the font using IntersectionObserver.
+### Easing Function
 
-#### `loadWebFontAsync(options: FontOptions): Promise<void>`
+- **`easeInOutQuad(t, b, c, d)`**
+  Provides an ease-in-out quadratic timing function for smooth animations. This can be used with animations like scrolling and sliding.
 
-Asynchronously loads a web font. Includes callbacks for success and error handling.
+### Advanced
 
-##### Additional Options:
+- **`toggleClassOnScroll(element, className, offset)`**
+  Toggles a class on an element when scrolling reaches a certain offset.
 
-- `onLoadSuccess`: (Optional) Callback when the font is loaded successfully.
-- `onLoadError`: (Optional) Callback when the font fails to load.
-- `timeout`: (Optional) Timeout in milliseconds for loading the font.
+## Contributing
 
-### CSS Utilities
-
-#### `addStyles(elements: HTMLElement | HTMLElement[], styles: CSSStyleDeclaration): void`
-
-Dynamically adds CSS styles to the specified elements.
-
-#### `getAllStyles(element: HTMLElement): CSSStyleDeclaration`
-
-Retrieves all styles applied to a specified element.
-
-#### `removeStylesByProps(element: HTMLElement, ...properties: string[]): void`
-
-Removes specified CSS properties from an element.
-
-#### `resetStyles(element: HTMLElement, styles: CSSStyleDeclaration): void`
-
-Resets an element's styles to a given state.
-
-#### `load(url: string): StyleResult`
-
-Loads external CSS and returns its style object.
-
-#### `loadAsync(url: string): Promise<StyleResult>`
-
-Asynchronously loads external CSS.
-
-### Color Utilities
-
-#### `calculateLuminance(color: string): number`
-
-Calculates the luminance of a given color.
-
-#### `colorBrightness(color: string): number`
-
-Determines the brightness level of a color.
-
-#### `colorContrast(color1: string, color2: string): number`
-
-Calculates the contrast between two colors.
-
-#### `darkenColor(color: string, percentage: number): string`
-
-Darkens a color by a given percentage.
-
-#### `lightenColor(color: string, percentage: number): string`
-
-Lightens a color by a given percentage.
-
-#### `generateColorGradient(startColor: string, endColor: string, steps: number): string[]`
-
-Generates a gradient between two colors over a given number of steps.
-
-#### `generateRandomColor(): string`
-
-Generates a random color.
-
-#### `hexToRgb(hex: string): { r: number, g: number, b: number }`
-
-Converts a hex color code to its RGB components.
-
-#### `rgbToHex(r: number, g: number, b: number): string`
-
-Converts RGB values to a hex color code.
+Feel free to contribute by submitting issues or pull requests to improve this library.
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
-
+This project is licensed under the [MIT License](LICENSE.md).
