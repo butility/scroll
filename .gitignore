@@ -1,0 +1,9 @@
+node_modules/
+.npmignore
+.env
+.vscode/
+.dist/
+
+# builds
+scroll.js
+/scroll.d.ts

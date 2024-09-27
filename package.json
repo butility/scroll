@@ -1,0 +1,35 @@
+{
+  "name": "scroll",
+  "version": "1.0.0",
+  "main": "scroll.js",
+  "type": "module",
+  "scripts": {
+    "build:types": "tsc --declaration --allowJs --emitDeclarationOnly scroll.js",
+    "build": "esbuild src/index.ts --bundle --outfile=scroll.js --format=esm",
+    "format": "prettier --write src/**/*.ts",
+    "type-check": "tsc --noEmit",
+    "publish": "node --experimental-specifier-resolution=node scripts/upload.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/butility/scroll.git"
+  },
+  "keywords": [
+    "butility",
+    "scroll"
+  ],
+  "author": "Ermiyas Arage",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/butility/scroll/issues"
+  },
+  "homepage": "https://github.com/butility/scroll#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.7.3",
+    "esbuild": "^0.24.0",
+    "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  }
+}
